@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missão Diária - Solo Leveling</title>
+  <style>
+    body {
+      background-color: #0a0f1c;
+      color: #00bfff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #101726;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00bfff55;
+      width: 350px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    label, input {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    input {
+      background-color: #1c2333;
+      border: none;
+      color: #fff;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      background-color: #00bfff;
+      color: #000;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .xp-bar {
+      background: #1c2333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    .xp-fill {
+      background: #00bfff;
+      height: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nível <span id="nivel">1</span></h1>
+    <div class="xp-bar">
+      <div id="xpAtualBarra" class="xp-fill" style="width: 0%"></div>
+    </div>
+    <p><strong>XP Atual:</strong> <span id="xpAtual">0</span>/100</p><h2>Missão Diária</h2>
+<form id="formMissao">
+  <p><strong>Flexões:</strong> <span id="contadorFlexao">0</span> / 100</p>
+  <button type="button" id="btnFlexao" onclick="incrementarFlexao()">Adicionar +10 Flexões</button>
+
+  <label>Agachamentos (0-100): <input type="number" id="agachamentos" min="0" max="100" /></label>
+  <label>Abdominais (0-100): <input type="number" id="abdominais" min="0" max="100" /></label>
+  <label>Polichinelos (0-100): <input type="number" id="polichinelos" min="0" max="100" /></label>
+  <label>Corrida (km, 0-10): <input type="number" id="corrida" min="0" max="10" step="0.1" /></label>
+  <button type="submit">Salvar Treino do Dia</button>
+</form>
+
+  </div>  <script>
+    let xp = 0;
+    let nivel = 1;
+    let flexoes = 0;
+
+    function incrementarFlexao() {
+      if (flexoes < 100) {
+        flexoes += 10;
+        if (flexoes > 100) flexoes = 100;
+        document.getElementById("contadorFlexao").innerText = flexoes;
+        if (flexoes === 100) {
+          document.getElementById("btnFlexao").disabled = true;
+          document.getElementById("btnFlexao").innerText = "Missão completa!";
+        }
+      }
+    }
+
+    document.getElementById("formMissao").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const agachamentos = parseInt(document.getElementById("agachamentos").value) || 0;
+      const abdominais = parseInt(document.getElementById("abdominais").value) || 0;
+      const polichinelos = parseInt(document.getElementById("polichinelos").value) || 0;
+      const corrida = parseFloat(document.getElementById("corrida").value) || 0;
+
+      const xpGanho = (flexoes + agachamentos + abdominais + polichinelos) * 0.2 + corrida * 10;
+      xp += Math.floor(xpGanho);
+
+      while (xp >= 100) {
+        xp -= 100;
+        nivel++;
+      }
+
+      document.getElementById("xpAtual").innerText = xp;
+      document.getElementById("xpAtualBarra").style.width = `${xp}%`;
+      document.getElementById("nivel").innerText = nivel;
+    });
+  </script></body>
+</html>
